@@ -16,9 +16,16 @@ mainEl.classList.add('flex-ctr');
 
 //Part 2
 // Select and cache the <nav id="top-menu"> element in a variable named topMenuEl.
+const topMenuEl = document.getElementById('top-menu');
+
 // Set the height of the topMenuEl element to be 100%.
+topMenuEl.style.height = '100%'
+
 // Set the background color of topMenuEl to the value stored in the --top-menu-bg CSS custom property.
+topMenuEl.style.backgroundColor = 'var(--top-menu-bg)'
+
 // Add a class of flex-around to topMenuEl.
+topMenuEl.classList.add('flex-around')
 
 //Part 3
 // Iterate over the entire menuLinks array and for each "link" object:
