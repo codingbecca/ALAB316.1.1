@@ -94,10 +94,64 @@ function handleClick (e) {
     if (e.srcElement.nodeName !== 'A'){
         return;
     } else {
-        for (let link of topMenuLinks){
+        let link = e.target;
+        let wasActive = link.classList.contains('active');
+        // if the link that was clicked is active, remove the active class and hide the menu
+        if(wasActive) {
             link.classList.remove('active')
+            subMenuEl.style.top = '0';
+            return
         }
-        e.target.classList.toggle('active')
+
+        //if any other links are active, remove the class
+        topMenuLinks.forEach(link => link.classList.remove('active'));
+        
+        //add the class active to the menu link that was clicked
+        link.classList.add('active');
+        
+        //find the index of the clicked link in menuLinks
+        const menuLinkIndex = menuLinks.findIndex(l => l.text === link.textContent )
+        const subLinks = menuLinks[menuLinkIndex].subLinks;
+        if(link.classList.contains('active')){
+            if (subLinks) {
+                buildSubmenu(subLinks);
+                subMenuEl.style.top = '100%';
+            } else {
+                subMenuEl.style.top = '0';
+            }
+        }
+
     }
+
+    // The submenu needs to be dynamic based on the clicked link. To facilitate that, we will create a helper function called buildSubmenu that does the following:
+    // Clear the current contents of subMenuEl.
+    // Iterate over the subLinks array, passed as an argument, and for each "link" object:
+    // Create an <a> element.
+    // Add an href attribute to the <a>, with the value set by the href property of the "link" object.
+    // Set the element's content to the value of the text property of the "link" object.
+    // Append the new element to the subMenuEl.
+    function buildSubmenu (subLinks) {
+        subMenuEl.innerHTML = '';
+        subLinks.forEach(link => {
+            const subLink = document.createElement('a');
+            subLink.setAttribute('href', `${link.href}`);
+            subLink.textContent = `${link.text}`;
+            subMenuEl.appendChild(subLink);
+        })
+
+    }
+
+}
+
+subMenuEl.addEventListener('click', handleSubMenuClick);
+
+function handleSubMenuClick(e) {
+    e.preventDefault();
+    if (e.srcElement.nodeName !== 'A'){
+        return;
+    }
+    subMenuEl.style.top = '0';
+    topMenuLinks.forEach(link => link.classList.remove('active'));
+    mainEl.innerHTML = `<h1>${e.target.textContent}</h1>`;
 
 }
